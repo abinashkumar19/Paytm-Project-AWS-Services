@@ -1,11 +1,11 @@
-#-----------------------------  commands to install mysql  ------------------------------
+-----------------------------  commands to install mysql  ------------------------------
 
 sudo yum update -y
 
 sudo dnf install -y mariadb105
 
 
-#----------------------------   commands to install python 3   -----------------------------------------------
+----------------------------   commands to install python 3   -----------------------------------------------
 
 # Update system
 sudo yum update -y
