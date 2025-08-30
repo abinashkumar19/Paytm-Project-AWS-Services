@@ -1,6 +1,7 @@
 -----------------------------  commands to install mysql  ------------------------------
 
 sudo yum update -y
+
 sudo dnf install -y mariadb105
 
 
