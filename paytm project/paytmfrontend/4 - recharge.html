@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobile Recharge</title>
+  <link rel="icon" type="image/png" href="https://paytm.com/favicon.ico" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 450px;
+      background: #fff;
+      padding: 32px 28px 28px 28px;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .container::before {
+      content: "";
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 160px;
+      height: 160px;
+      background: linear-gradient(135deg, #007bff 60%, #00c6ff 100%);
+      border-radius: 50%;
+      opacity: 0.12;
+      z-index: 0;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 28px;
+      color: #007bff;
+      letter-spacing: 1px;
+      font-size: 2rem;
+      font-weight: 700;
+      z-index: 1;
+      position: relative;
+    }
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: 600;
+      color: #333;
+      font-size: 1rem;
+      z-index: 1;
+      position: relative;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 7px;
+      border: 1.5px solid #b3c6e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f8fbff;
+      transition: border 0.2s;
+      z-index: 1;
+      position: relative;
+    }
+    input:focus, select:focus {
+      border: 1.5px solid #007bff;
+      outline: none;
+      background: #fff;
+    }
+    button {
+      background: linear-gradient(90deg, #007bff 60%, #00c6ff 100%);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin-top: 28px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0,123,255,0.08);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+      box-shadow: 0 4px 16px rgba(0,123,255,0.16);
+    }
+    .method-box {
+      display: none;
+      margin-top: 14px;
+      background: #f1f7ff;
+      padding: 14px 12px 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #e3eafc;
+      box-shadow: 0 1px 4px rgba(0,123,255,0.04);
+    }
+    @media (max-width: 600px) {
+      .container {
+        max-width: 98vw;
+        padding: 16px 4vw 18px 4vw;
+      }
+      h2 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Mobile Recharge</h2>
+    <form id="rechargeForm">
+      <label for="number">Mobile Number:</label>
+      <input type="tel" id="number" maxlength="10" pattern="[0-9]{10}" required title="Please enter a valid 10 digit mobile number" placeholder="Enter 10 digit number" />
+
+      <label for="operator">Operator:</label>
+      <select id="operator" required>
+        <option value="">--Select Operator--</option>
+        <option value="Airtel">Airtel</option>
+        <option value="Jio">Jio</option>
+        <option value="Vi">Vi</option>
+        <option value="BSNL">BSNL</option>
+      </select>
+
+      <label for="plan">Choose Plan:</label>
+      <select id="plan" required>
+        <option value="">--Select Plan--</option>
+        <option value="149">₹149 - 1GB/day - 20 Days</option>
+        <option value="249">₹249 - 1.5GB/day - 28 Days</option>
+        <option value="399">₹399 - 2GB/day - 56 Days</option>
+        <option value="599">₹599 - 2GB/day - 84 Days</option>
+      </select>
+
+      <label for="method">Payment Method:</label>
+      <select id="method" required>
+        <option value="">--Select Method--</option>
+        <option value="UPI">UPI</option>
+        <option value="Debit Card">Debit Card</option>
+        <option value="Credit Card">Credit Card</option>
+        <option value="NetBanking">Net Banking</option>
+      </select>
+
+      <!-- Dynamic input fields based on payment method -->
+      <div id="upiBox" class="method-box">
+        <label for="upiId">Enter UPI ID:</label>
+        <input type="text" id="upiId" placeholder="example@upi" />
+      </div>
+
+      <div id="cardBox" class="method-box">
+        <label for="cardNumber">Card Number:</label>
+        <input type="text" id="cardNumber" maxlength="16" placeholder="1234 5678 9012 3456" />
+        <label for="expiry">Expiry Date:</label>
+        <input type="month" id="expiry" />
+        <label for="cvv">CVV:</label>
+        <input type="password" id="cvv" maxlength="3" />
+      </div>
+
+      <div id="netBox" class="method-box">
+        <label for="bank">Select Bank:</label>
+        <select id="bank">
+          <option value="SBI">SBI</option>
+          <option value="HDFC">HDFC</option>
+          <option value="ICICI">ICICI</option>
+          <option value="AXIS">AXIS</option>
+        </select>
+      </div>
+
+      <button type="submit">Proceed to Pay</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('rechargeForm');
+    const methodSelect = document.getElementById('method');
+    const upiBox = document.getElementById('upiBox');
+    const cardBox = document.getElementById('cardBox');
+    const netBox = document.getElementById('netBox');
+
+    // Show relevant payment inputs based on method
+    methodSelect.addEventListener('change', () => {
+      upiBox.style.display = 'none';
+      cardBox.style.display = 'none';
+      netBox.style.display = 'none';
+
+      if (methodSelect.value === 'UPI') upiBox.style.display = 'block';
+      if (methodSelect.value === 'Debit Card' || methodSelect.value === 'Credit Card') cardBox.style.display = 'block';
+      if (methodSelect.value === 'NetBanking') netBox.style.display = 'block';
+    });
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const number = document.getElementById('number').value;
+      const operator = document.getElementById('operator').value;
+      const plan = document.getElementById('plan').value;
+      const method = document.getElementById('method').value;
+      let extra = '';
+      if (method === 'UPI') {
+        extra = document.getElementById('upiId').value;
+      } else if (method === 'Debit Card' || method === 'Credit Card') {
+        extra = document.getElementById('cardNumber').value.slice(-4);
+      } else if (method === 'NetBanking') {
+        extra = document.getElementById('bank').value;
+      }
+      const params = new URLSearchParams({
+        number,
+        operator,
+        plan,
+        method,
+        extra,
+        date: new Date().toLocaleString()
+      });
+      window.location.href = `processing.html?${params.toString()}`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+EC2 instance should have  an IAM Role with S3 permissions:   policy json :
+
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowBackendAccess",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::<YOUR-AWS-ACCOUNT-ID>:role/<EC2-ROLE-NAME>"
+      },
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject"
+      ],
+      "Resource": "arn:aws:s3:::your-bucket-name/*"
+    }
+  ]
+}
+
+
+
+======================================================================================================================================
+
+
+Bucket policy:
+
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::accountnumber:role/rolename"
+            },
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::bucketname",
+                "arn:aws:s3:::bucketname/*"
+            ]
+        }
+    ]
+}

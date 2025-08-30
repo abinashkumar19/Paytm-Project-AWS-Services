@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paytm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      img{
+        pointer-events: none
+      }
+      /* Modal styles */
+      .login-modal-bg {
+        position: fixed;
+        z-index: 9999;
+        left: 0; top: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .login-modal-content {
+        background: #fff;
+        border-radius: 1rem;
+        padding: 2rem 2.5rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        text-align: center;
+        min-width: 250px;
+        max-width: 90vw;
+      }
+      .login-modal-content button {
+        margin-top: 1.5rem;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50">
+    <!-- Login Modal -->
+    <div id="loginModal" class="login-modal-bg" style="display:none;">
+      <div class="login-modal-content">
+        <img src="https://assetscdn1.paytm.com/images/catalog/category/5165/paytm_logo.png" alt="Paytm Logo" class="mx-auto mb-4 w-24 h-auto" />
+        <h2 class="text-2xl font-bold mb-4 text-sky-700">Please Login</h2>
+        <p class="text-lg text-gray-700">You must be logged in to continue.</p>
+        <button onclick="closeLoginModal()" class="mt-6 px-6 py-2 bg-sky-700 text-white rounded-2xl font-semibold hover:bg-sky-900 transition">Close</button>
+      </div>
+    </div>
+    <nav
+      class="flex justify-between items-center px-11 py-4 bg-white shadow-lg shadow-gray-300"
+    >
+      <div>
+        <img class="max-w-[200px]" src="https://files.catbox.moe/56y4g3.jpg" alt="logo" />
+      </div>
+      <ul class="hidden justify-between mx-5 mr-auto lg:flex">
+        <li
+          class="mx-5 text-lg font-semibold cursor-pointer hover:bg-slate-100 p-1 whitespace-nowrap"
+        >
+          Paytm For Consumer
+        </li>
+        <li
+          class="mx-5 text-lg font-semibold cursor-pointer hover:bg-slate-100 p-1 whitespace-nowrap"
+        >
+          Paytm For Business
+        </li>
+        <li
+          class="mx-5 text-lg font-semibold cursor-pointer hover:bg-slate-100 p-1 whitespace-nowrap"
+        >
+          Company
+        </li>
+        <li
+          class="mx-5 text-lg font-semibold cursor-pointer hover:bg-slate-100 p-1 whitespace-nowrap"
+        >
+          Investor Relations
+        </li>
+        <li
+          class="mx-5 text-lg font-semibold cursor-pointer hover:bg-slate-100 p-1 whitespace-nowrap"
+        >
+          Carrer
+        </li>
+      </ul>
+      <div>
+        <button
+          class="flex px-4 py-2 bg-cyan-400 rounded-3xl hover:bg-sky-700 text-white font-semibold items-center whitespace-nowrap"
+          onclick="window.location.href='signup.html';"
+        >
+          Sign In
+          <img class="w-[30px] ml-2" src="https://openclipart.org/image/2000px/247319" alt="avtar" />
+        </button>
+      </div>
+    </nav>
+    <div class="container p-2 mx-auto text-center bg-slate-200 mt-1">
+      <p class="text-base font-semibold">
+        No Wallet KYC Required 😊 to pay using UPI on Paytm. Learn more.
+      </p>
+    </div>
+    <section
+      class="flex justify-between flex-col-reverse items-center md:items-end pt-24 pb-24 md:flex-row"
+    >
+      <div class="ml-2 mt-20 md:mt-0">
+        <img
+          class="w-20 m-auto md:m-1"
+          src="https://img.utdstc.com/icon/d4f/84d/d4f84da5b1339dc1dff493bd53688cae08f84e25252d2efc5dea1acc4cbca274:200"
+          alt="hero Paytm"
+        />
+        <h1 class="text-5xl font-bold mt-10 mb-4 text-center md:text-left">
+          India's Most-loved <br />
+          Payments App
+        </h1>
+        <p class="text-lg font-semibold text-center md:text-left">
+          Recharge & pay bills, book flights & movie tickets, <br />
+          open a savings account, invest in stocks & mutual <br />
+          funds, and do a lot more.
+        </p>
+        <button
+          class="flex items-center justify-center px-5 py-2 bg-black text-white rounded-3xl mt-10"
+        >
+          Download Paytm App
+          <svg
+            width="14"
+            height="16"
+            viewBox="0 0 14 16"
+            fill="none"
+            class="ml-2"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.6593 15.3557C10.7589 16.1979 9.76546 16.0666 8.81854 15.6695C7.81182 15.2644 6.89149 15.2388 5.82828 15.6695C4.50426 16.2203 3.80155 16.0602 3.00415 15.3557C-1.49786 10.8883 -0.833353 4.08311 4.28331 3.82691C5.52427 3.89096 6.39311 4.48821 7.12406 4.53785C8.21052 4.32489 9.25047 3.71483 10.4133 3.79489C11.8105 3.90377 12.8554 4.43538 13.5531 5.3913C10.6791 7.05657 11.3603 10.7073 14 11.7321C13.4717 13.0691 12.7939 14.3902 11.6576 15.3669L11.6593 15.3557ZM7.02439 3.77888C6.88982 1.79336 8.55939 0.160122 10.4798 0C10.7439 2.28974 8.32017 4.00305 7.02439 3.77888Z"
+              fill="#fff"
+            ></path>
+          </svg>
+          <svg
+            width="14"
+            height="16"
+            class="ml-2"
+            viewBox="0 0 14 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M0.088012 0.571735C0.0310801 0.726729 0 0.910797 0 1.121V14.8786C0 15.0894 0.0311427 15.2736 0.0881839 15.4286L7.32808 7.9997L0.088012 0.571735ZM0.590122 15.9564C0.85223 16.0466 1.18264 15.9995 1.54068 15.7912L10.0736 10.8165L7.83627 8.52109L0.590122 15.9564ZM10.7221 10.4391L13.3647 8.8987C14.2118 8.40415 14.2118 7.59609 13.3647 7.10217L10.7211 5.561L8.34443 7.99966L10.7221 10.4391ZM10.073 5.18317L1.54068 0.209061C1.18252 0.000250885 0.852017 -0.0466058 0.589868 0.0438429L7.83624 7.47828L10.073 5.18317Z"
+              fill="#fff"
+            ></path>
+          </svg>
+        </button>
+      </div>
+      <div class="p-2">
+        <img
+          class="w-[500px]"
+          src="https://envs.sh/tR-.jpg/IMG20250826633.jpg"
+          alt="paytm mobile hero image"
+        />
+      </div>
+    </section>
+    <!-- ... rest of the HTML ... -->
+    <!-- The rest of your HTML remains unchanged -->
+    <!-- ... -->
+    <footer class="text-gray-600 body-font">
+      <div
+        class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col"
+      >
+        <div class="flex items-center flex-col sm:flex-row">
+          <span
+            class="text-2xl text-black font-medium w-[300px] mb-4 md:mb-0 text-center md:text-left"
+          >
+            Download Paytm App to Pay from anywhere</span
+          >
+          <a
+            class="cursor-pointer text-sky-400 mb-4 md:mb-0 mr-2"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://apps.apple.com/in/app/paytm-secure-upi-payments/id473941634"
+          >
+            <img
+              alt="Download Paytm iOS app"
+              src="https://assetscdn1.paytm.com/frontendcommonweb/71229188.svg"
+            />
+          </a>
+          <a
+            class="cursor-pointer text-sky-400 mb-4 md:mb-0"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://play.google.com/store/apps/details?id=net.one97.paytm"
+          >
+            <img
+              alt="Download Paytm Android app"
+              src="https://assetscdn1.paytm.com/frontendcommonweb/33d9d7f1.svg"
+            />
+          </a>
+        </div>
+        <span
+          class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start"
+        >
+          <a class="text-gray-500">
+            <svg
+              fill="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              class="w-5 h-5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"
+              ></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg
+              fill="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              class="w-5 h-5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+              ></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              class="w-5 h-5"
+              viewBox="0 0 24 24"
+            >
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+              <path
+                d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"
+              ></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg
+              fill="currentColor"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="0"
+              class="w-5 h-5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="none"
+                d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"
+              ></path>
+              <circle cx="4" cy="4" r="2" stroke="none"></circle>
+            </svg>
+          </a>
+        </span>
+      </div>
+    </footer>
+    <div class="w-full h-3 bg-sky-400"></div>
+    <div class="w-full h-3 bg-sky-900"></div>
+    <script>
+      // Show the login modal
+      function showLoginModal() {
+        var modal = document.getElementById('loginModal');
+        if (modal) {
+          modal.style.display = 'flex';
+        }
+      }
+      // Close the login modal
+      function closeLoginModal() {
+        var modal = document.getElementById('loginModal');
+        if (modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+      // Prevent multiple modals on rapid clicks
+      let modalTimeout = null;
+
+      // Attach click event to the whole document
+      document.addEventListener('DOMContentLoaded', function() {
+        // Don't trigger on modal itself
+        document.body.addEventListener('click', function(e) {
+          // If the modal is open and click is inside modal, ignore
+          var modal = document.getElementById('loginModal');
+          if (modal && modal.style.display === 'flex') {
+            // If click is inside modal-content, do nothing
+            if (e.target.closest('.login-modal-content')) {
+              return;
+            }
+            // If click is on modal background, close modal
+            if (e.target === modal) {
+              closeLoginModal();
+              return;
+            }
+          } else {
+            // Otherwise, show modal for any click
+            showLoginModal();
+            // Prevent default action for links and buttons
+            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+              e.preventDefault();
+            }
+          }
+        }, true); // use capture to get all clicks
+
+        // Prevent scrolling when modal is open
+        var modal = document.getElementById('loginModal');
+        var observer = new MutationObserver(function() {
+          if (modal && modal.style.display === 'flex') {
+            document.body.style.overflow = 'hidden';
+          } else {
+            document.body.style.overflow = '';
+          }
+        });
+        observer.observe(modal, { attributes: true, attributeFilter: ['style'] });
+      });
+    </script>
+  </body>
+</html>
