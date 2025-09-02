@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paytm Signup</title>
+  <title>Paytm</title>
   <link rel="icon" type="image/png" href="https://paytm.com/favicon.ico">
   <style>
     body {
@@ -16,7 +14,7 @@
       align-items: center;
       height: 100vh;
     }
-    .signup-box {
+    .login-box {
       border: 1px solid #ddd;
       border-radius: 10px;
       padding: 20px;
@@ -24,52 +22,35 @@
       background: #fff;
       box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
     }
-    .signup-header {
+    .login-header {
       text-align: center;
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 20px;
     }
-    .signup-form {
-      margin: 0 auto;
-      max-width: 340px;
-      background: #fff;
-      padding: 28px 22px 20px 22px;
-      border-radius: 14px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    .content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-radius: 10px;
+      background: #f9fbff;
     }
-    .signup-form input {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 7px;
-      border: 1.5px solid #b3d1fa;
-      background: #f7fbff;
-      font-size: 1em;
-      margin-bottom: 10px;
+    .steps {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
     }
-    .signup-form button {
-      width: 100%;
-      padding: 11px;
-      border-radius: 7px;
-      border: none;
-      background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
-      color: #fff;
-      font-size: 1.08em;
-      font-weight: 500;
-      cursor: pointer;
-      margin-bottom: 10px;
+    .steps h3 {
+      font-size: 15px;
+      margin-bottom: 8px;
     }
-    .signup-form .cancel-btn {
-      background: #f2f2f2;
-      color: #007bff;
-      font-size: 1em;
-      font-weight: 500;
-      margin-top: 0;
-    }
-    .signup-form .message {
-      margin-top: 12px;
-      text-align: center;
-      font-size: 0.98em;
+    .qr-box img {
+      width: 150px;
+      height: 150px;
+      border: 8px solid white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
     .policy {
       text-align: center;
@@ -96,32 +77,97 @@
       margin: 0 8px;
       cursor: pointer;
     }
-    .login-link {
-      display: block;
-      text-align: center;
-      margin-top: 12px;
-      color: #007bff;
-      text-decoration: underline;
-      cursor: pointer;
-      font-size: 1em;
-      font-weight: 500;
-    }
   </style>
 </head>
 <body>
-  <div class="signup-box">
-    <div class="signup-header">Sign up for your Paytm account</div>
-    <form class="signup-form" id="signupForm" autocomplete="off" onsubmit="event.preventDefault(); signup();">
-      <input id="signupName" type="text" placeholder="Full Name" required />
-      <input id="signupEmail" type="email" placeholder="Email" required />
-      <input id="signupPassword" type="password" placeholder="Password" required minlength="6" />
-      <button type="submit">Sign Up</button>
-      <button type="button" class="cancel-btn" onclick="clearSignupForm()">Cancel</button>
-      <div class="message" id="signupMessage"></div>
-      <span class="login-link" onclick="window.location.href='signup.html'">Already have an account? Login</span>
-    </form>
+  <div class="login-box">
+    <div class="login-header">signup with your Paytm account</div>
+    <div class="content">
+      <div class="steps">
+        <h3>Steps to scan QR Code</h3>
+        <ol>
+          <li>Open Google lens</li>
+          <li>Tap Scan option available at the bottom</li>
+          <li>Point Paytm Scan at QR Code to login</li>
+        </ol>
+      </div>
+      <div class="qr-box">
+        <img src="https://i.ibb.co/wFjq0nWr/qrcode-chrome-1.png" alt="Paytm QR Code">
+      </div>
+      
+    </div>
+    <div id="loginSection" style="text-align:center; margin-top: 18px;">
+      <span id="loginBtn" style="color: #007bff; font-size: 1.08em; font-weight: 500; cursor: pointer; text-decoration: underline;">Login</span>
+      <span id="signupBtn" style="color: #28a745; font-size: 1.08em; font-weight: 500; cursor: pointer; text-decoration: underline; margin-left: 24px;">Signup</span>
+      <div id="loginForm" style="display:none; margin: 28px auto 0 auto; max-width:340px; background:#fff; padding:28px 22px 20px 22px; border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.08);">
+        <h3 style="text-align:center; color:#007bff; margin-bottom:18px;">Login to Paytm</h3>
+        <div style="margin-bottom:14px;">
+          <input id="loginEmail" type="email" placeholder="Email" style="width:100%; padding:10px 12px; border-radius:7px; border:1.5px solid #b3d1fa; background:#f7fbff; font-size:1em; margin-bottom:10px;"/>
+          <input id="loginPassword" type="password" placeholder="Password" style="width:100%; padding:10px 12px; border-radius:7px; border:1.5px solid #b3d1fa; background:#f7fbff; font-size:1em;"/>
+        </div>
+        <button onclick="login()" style="width:100%; padding:11px; border-radius:7px; border:none; background:linear-gradient(90deg, #007bff 0%, #0056b3 100%); color:#fff; font-size:1.08em; font-weight:500; cursor:pointer;">Login</button>
+        <button onclick="closeLoginForm()" style="width:100%; margin-top:10px; padding:9px; border-radius:7px; border:none; background:#f2f2f2; color:#007bff; font-size:1em; font-weight:500; cursor:pointer;">Cancel</button>
+        <div id="loginMessage" style="margin-top:12px; text-align:center; font-size:0.98em;"></div>
+      </div>
+    </div>
+    <script>
+      // Add signup button redirect
+      document.addEventListener('DOMContentLoaded', function() {
+        var signupBtn = document.getElementById('signupBtn');
+        if (signupBtn) {
+          signupBtn.onclick = function() {
+            window.location.href = "signuppscanner.html";
+          };
+        }
+      });
+    </script>
+    <script>
+      // Set your backend API URL here
+      const API_URL = "http://backend-1090030115.ap-northeast-1.elb.amazonaws.com";
+
+      document.getElementById('loginBtn').onclick = function() {
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('loginBtn').style.display = 'none';
+      };
+
+      function closeLoginForm() {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('loginBtn').style.display = 'inline';
+        document.getElementById('loginMessage').innerHTML = '';
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPassword').value = '';
+      }
+
+      async function login() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const msg = document.getElementById('loginMessage');
+        msg.innerHTML = '';
+        if (!email || !password) {
+          msg.innerHTML = '<span style="color:#d32f2f;">Please enter both email and password.</span>';
+          return;
+        }
+        try {
+          let response = await fetch(`${API_URL}/api/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+          let data = await response.json();
+          if (response.ok) {
+            msg.innerHTML = '<span style="color:#388e3c;">Login successful! Redirecting...</span>';
+            setTimeout(() => { window.location.href = "main.html"; }, 1200);
+            setTimeout(() => { closeLoginForm(); }, 1200);
+          } else {
+            msg.innerHTML = `<span style="color:#d32f2f;">${data.error || "Login failed"}</span>`;
+          }
+        } catch (e) {
+          msg.innerHTML = '<span style="color:#d32f2f;">Network error. Please try again.</span>';
+        }
+      }
+    </script>
     <div class="policy">
-      By signing up, you agree to our <a href="#">privacy policy</a> and <a href="#">terms of use</a>
+      By signing in, you agree to our <a href="#">privacy policy</a> and <a href="#">terms of use</a>
     </div>
     <div class="download">
       <p>To create an account download Paytm App</p>
@@ -135,48 +181,5 @@
       </div>
     </div>
   </div>
-  <script>
-    // Set your backend API URL here
-    const API_URL = "http://backend-1090030115.ap-northeast-1.elb.amazonaws.com";
-
-    function clearSignupForm() {
-      document.getElementById('signupName').value = '';
-      document.getElementById('signupEmail').value = '';
-      document.getElementById('signupPassword').value = '';
-      document.getElementById('signupMessage').innerHTML = '';
-    }
-
-    async function signup() {
-      const name = document.getElementById('signupName').value.trim();
-      const email = document.getElementById('signupEmail').value.trim();
-      const password = document.getElementById('signupPassword').value;
-      const msg = document.getElementById('signupMessage');
-      msg.innerHTML = '';
-      if (!name || !email || !password) {
-        msg.innerHTML = '<span style="color:#d32f2f;">Please fill all fields.</span>';
-        return;
-      }
-      if (password.length < 6) {
-        msg.innerHTML = '<span style="color:#d32f2f;">Password must be at least 6 characters.</span>';
-        return;
-      }
-      try {
-        let response = await fetch(`${API_URL}/api/signup`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, password })
-        });
-        let data = await response.json();
-        if (response.ok) {
-          msg.innerHTML = '<span style="color:#388e3c;">Signup successful! Redirecting to QR scanner...</span>';
-          setTimeout(() => { window.location.href = "signuppscanner.html"; }, 1200);
-        } else {
-          msg.innerHTML = `<span style="color:#d32f2f;">${data.error || "Signup failed"}</span>`;
-        }
-      } catch (e) {
-        msg.innerHTML = '<span style="color:#d32f2f;">Network error. Please try again.</span>';
-      }
-    }
-  </script>
 </body>
 </html>
