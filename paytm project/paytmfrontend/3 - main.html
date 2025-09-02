@@ -1,178 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paytm</title>
-  <link rel="icon" type="image/png" href="https://paytm.com/favicon.ico">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .login-box {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 20px;
-      width: 400px;
-      background: #fff;
-      box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
-    }
-    .login-header {
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-    .content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px;
-      border-radius: 10px;
-      background: #f9fbff;
-    }
-    .steps {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #333;
-    }
-    .steps h3 {
-      font-size: 15px;
-      margin-bottom: 8px;
-    }
-    .qr-box img {
-      width: 150px;
-      height: 150px;
-      border: 8px solid white;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-    }
-    .policy {
-      text-align: center;
-      font-size: 12px;
-      margin: 20px 0;
-      color: #555;
-    }
-    .policy a {
-      color: #0070e0;
-      text-decoration: none;
-    }
-    .download {
-      text-align: center;
-      border-top: 1px solid #ddd;
-      padding-top: 15px;
-    }
-    .download p {
-      margin-bottom: 10px;
-      font-size: 13px;
-      color: #333;
-    }
-    .store-links img {
-      width: 140px;
-      margin: 0 8px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <div class="login-box">
-    <div class="login-header">signup with your Paytm account</div>
-    <div class="content">
-      <div class="steps">
-        <h3>Steps to scan QR Code</h3>
-        <ol>
-          <li>Open Google lens</li>
-          <li>Tap Scan option available at the bottom</li>
-          <li>Point Paytm Scan at QR Code to login</li>
-        </ol>
-      </div>
-      <div class="qr-box">
-        <img src="https://i.ibb.co/wFjq0nWr/qrcode-chrome-1.png" alt="Paytm QR Code">
-      </div>
 
-    </div>
-    <div id="loginSection" style="text-align:center; margin-top: 18px;">
-      <span id="loginBtn" style="color: #007bff; font-size: 1.08em; font-weight: 500; cursor: pointer; text-decoration: underline;">Login</span>
-      <div id="loginForm" style="display:none; margin: 28px auto 0 auto; max-width:340px; background:#fff; padding:28px 22px 20px 22px; border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.08);">
-        <h3 style="text-align:center; color:#007bff; margin-bottom:18px;">Login to Paytm</h3>
-        <div style="margin-bottom:14px;">
-          <input id="loginEmail" type="email" placeholder="Email" style="width:100%; padding:10px 12px; border-radius:7px; border:1.5px solid #b3d1fa; background:#f7fbff; font-size:1em; margin-bottom:10px;"/>
-          <input id="loginPassword" type="password" placeholder="Password" style="width:100%; padding:10px 12px; border-radius:7px; border:1.5px solid #b3d1fa; background:#f7fbff; font-size:1em;"/>
-        </div>
-        <button onclick="login()" style="width:100%; padding:11px; border-radius:7px; border:none; background:linear-gradient(90deg, #007bff 0%, #0056b3 100%); color:#fff; font-size:1.08em; font-weight:500; cursor:pointer;">Login</button>
-        <button onclick="closeLoginForm()" style="width:100%; margin-top:10px; padding:9px; border-radius:7px; border:none; background:#f2f2f2; color:#007bff; font-size:1em; font-weight:500; cursor:pointer;">Cancel</button>
-        <div id="loginMessage" style="margin-top:12px; text-align:center; font-size:0.98em;"></div>
-      </div>
-    </div>
-    <script>
-      // Set your backend API URL here
-      const API_URL = "http://backend-1090030115.ap-northeast-1.elb.amazonaws.com";
-
-      document.getElementById('loginBtn').onclick = function() {
-        document.getElementById('loginForm').style.display = 'block';
-        document.getElementById('loginBtn').style.display = 'none';
-      };
-
-      function closeLoginForm() {
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('loginBtn').style.display = 'inline';
-        document.getElementById('loginMessage').innerHTML = '';
-        document.getElementById('loginEmail').value = '';
-        document.getElementById('loginPassword').value = '';
-      }
-
-      async function login() {
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        const msg = document.getElementById('loginMessage');
-        msg.innerHTML = '';
-        if (!email || !password) {
-          msg.innerHTML = '<span style="color:#d32f2f;">Please enter both email and password.</span>';
-          return;
-        }
-        try {
-          let response = await fetch(`${API_URL}/api/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-          });
-          let data = await response.json();
-          if (response.ok) {
-            msg.innerHTML = '<span style="color:#388e3c;">Login successful! Redirecting...</span>';
-            setTimeout(() => { window.location.href = "main.html"; }, 1200);
-            setTimeout(() => { closeLoginForm(); }, 1200);
-          } else {
-            msg.innerHTML = `<span style="color:#d32f2f;">${data.error || "Login failed"}</span>`;
-          }
-        } catch (e) {
-          msg.innerHTML = '<span style="color:#d32f2f;">Network error. Please try again.</span>';
-        }
-      }
-    </script>
-    <div class="policy">
-      By signing in, you agree to our <a href="#">privacy policy</a> and <a href="#">terms of use</a>
-    </div>
-    <div class="download">
-      <p>To create an account download Paytm App</p>
-      <div class="store-links">
-        <a href="https://apps.apple.com/in/app/paytm/id473941634" target="_blank" rel="noopener">
-          <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" style="width:140px; height:auto;">
-        </a>
-        <a href="https://play.google.com/store/apps/details?id=net.one97.paytm" target="_blank" rel="noopener">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play">
-        </a>
-      </div>
-    </div>
-  </div>
-</body>
-</html>
-
-cat: cat: No such file or directory
 <!DOCTYPE html>
 <html lang="en">
 
@@ -193,8 +19,8 @@ cat: cat: No such file or directory
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
-
-
+  
+  
 </head>
 
 <body>
@@ -345,7 +171,7 @@ cat: cat: No such file or directory
 
         <div class="col-md-4 col-lg-2 col-sm-6  col-6 pb-3 pt-3">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="  https://assetscdn1.paytm.com/images/catalog/view_item/733299/1626251017535.png" alt=""
+            <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/733299/1626251017535.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;">Pay</div>
             <div class="fw-bold text-white"> Electricty</div>
@@ -355,7 +181,7 @@ cat: cat: No such file or directory
 
         <div class="col-md-4 col-lg-2 col-sm-6  col-6 pb-3 pt-3">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="  https://assetscdn1.paytm.com/images/catalog/view_item/733311/1626251101045.png" alt=""
+            <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/733311/1626251101045.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;">Recharge</div>
             <div class="fw-bold text-white"> DTH</div>
@@ -365,7 +191,7 @@ cat: cat: No such file or directory
 
         <div class="col-md-4 col-lg-2 col-sm-6  col-6 pb-3 pt-3">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="  https://assetscdn1.paytm.com/images/catalog/view_item/733307/1626251127863.png" alt=""
+            <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/733307/1626251127863.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;">Book</div>
             <div class="fw-bold text-white"> Gas</div>
@@ -376,7 +202,7 @@ cat: cat: No such file or directory
 
         <div class="col-md-4 col-lg-2 col-sm-6 col-6 pb-3 pt-3">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="  https://assetscdn1.paytm.com/images/catalog/view_item/1269194/1672827522093.png" alt=""
+            <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/1269194/1672827522093.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;">Pay</div>
             <div class="fw-bold text-white"> Broadband &</div>
@@ -386,7 +212,7 @@ cat: cat: No such file or directory
 
         <div class="col-md-4 col-lg-2 col-sm-6 col-6 pb-3 pt-3">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="  https://assetscdn1.paytm.com/images/catalog/view_item/1269198/1672828917034.png" alt=""
+            <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/1269198/1672828917034.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;">Pay</div>
             <div class="fw-bold text-white"> Education</div>
@@ -412,7 +238,7 @@ cat: cat: No such file or directory
       <div class="row pb-5">
         <div class="col-md-4 col-lg-2 col-sm-6 pb-3  col-6 pt-3 ">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="          https://assetscdn1.paytm.com/images/catalog/view_item/733295/1626259710574.png" alt=""
+            <img src="		https://assetscdn1.paytm.com/images/catalog/view_item/733295/1626259710574.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;;">Movie</div>
             <div class="fw-bold text-white "> Tickets &gt;</div>
@@ -423,7 +249,7 @@ cat: cat: No such file or directory
 
         <div class="col-md-4 col-lg-2 col-sm-6 col-6 pb-3 pt-3">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="  https://assetscdn1.paytm.com/images/catalog/view_item/733296/1626259884425.png" alt=""
+            <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/733296/1626259884425.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;">Flight</div>
             <div class="fw-bold text-white"> Tickets &gt;</div>
@@ -433,7 +259,7 @@ cat: cat: No such file or directory
 
         <div class="col-md-4 col-lg-2 col-sm-6 col-6 pb-3 pt-3">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="          https://assetscdn1.paytm.com/images/catalog/view_item/729996/1626260477699.png" alt=""
+            <img src="		https://assetscdn1.paytm.com/images/catalog/view_item/729996/1626260477699.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;">Bus</div>
             <div class="fw-bold text-white"> Tickets &gt;</div>
@@ -443,7 +269,7 @@ cat: cat: No such file or directory
 
         <div class="col-md-4 col-lg-2 col-sm-6 col-6 pb-3 pt-3">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="          https://assetscdn1.paytm.com/images/catalog/view_item/729997/1626260495975.png" alt=""
+            <img src="		https://assetscdn1.paytm.com/images/catalog/view_item/729997/1626260495975.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;">Train</div>
             <div class="fw-bold text-white"> Tickets &gt;</div>
@@ -454,7 +280,7 @@ cat: cat: No such file or directory
 
         <div class="col-md-4 col-lg-2 col-sm-6 col-6 pb-3 pt-3">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="          https://assetscdn1.paytm.com/images/catalog/view_item/729998/1666185237748.png" alt=""
+            <img src="		https://assetscdn1.paytm.com/images/catalog/view_item/729998/1666185237748.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;">Buy</div>
             <div class="fw-bold text-white"> Insurance &gt;</div>
@@ -464,7 +290,7 @@ cat: cat: No such file or directory
 
         <div class="col-md-4 col-lg-2 col-sm-6 col-6 pb-3 pt-3">
           <a href="javascript:void(0);" onclick="showUnderConstructionPopup()">
-            <img src="          https://assetscdn1.paytm.com/images/catalog/view_item/729999/1626259968563.png" alt=""
+            <img src="		https://assetscdn1.paytm.com/images/catalog/view_item/729999/1626259968563.png" alt=""
               width="64px" class="img-fluid">
             <div class="fw-bold text-white " style="font-size: 20x;">International</div>
             <div class="fw-bold text-white"> Flights &gt;</div>
@@ -612,7 +438,7 @@ cat: cat: No such file or directory
 
             <div class="col-md-12 mb-5">
 
-              <img src="        https://assetscdn1.paytm.com/images/catalog/view/307186/1615957674521.png" alt="" width="77px"
+              <img src="	https://assetscdn1.paytm.com/images/catalog/view/307186/1615957674521.png" alt="" width="77px"
                 height="92px" class="img-fluid">
               <span class="fw-bold" style="font-size: 19px;">UPI Money Transfer</span> <br>
 
@@ -660,7 +486,7 @@ cat: cat: No such file or directory
 
             <div class="col-md-12 mb-5">
 
-              <img src="        https://assetscdn1.paytm.com/images/catalog/view/307191/1613622537678.png" alt="" width="77px"
+              <img src="	https://assetscdn1.paytm.com/images/catalog/view/307191/1613622537678.png" alt="" width="77px"
                 height="92px" class="img-fluid">
               <!-- <span class="fw-bold" style="font-size: 19px;">UPI Money Transfer</span> <br> -->
 
@@ -734,7 +560,7 @@ cat: cat: No such file or directory
         </p>
       </div>
       <div class="pt-4">
-        <img src="      https://assetscdn1.paytm.com/images/catalog/view_item/853976/1626079147084.png" alt="" width="463px"
+        <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/853976/1626079147084.png" alt="" width="463px"
           height="296px" class="img-fluid">
       </div>
     </div>
@@ -755,7 +581,7 @@ cat: cat: No such file or directory
       <div class="row">
 
         <div class="col-lg-3 col-md-3 col-sm-6 col-6">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view_item/854033/1626081565192.png" alt=""
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/854033/1626081565192.png" alt=""
             width="240px " height="220px" class="img-fluid">
           <h3 class="fw-bold"> POS Billing <br>
             Software</h3>
@@ -766,7 +592,7 @@ cat: cat: No such file or directory
 
 
         <div class="col-lg-3 col-md-3 col-sm-6 col-6">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view_item/854035/1626081071077.png" alt=""
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/854035/1626081071077.png" alt=""
             width="240px " height="220px" class="img-fluid">
           <h3 class="fw-bold"> Paytm for <br>
             Business App</h3>
@@ -777,7 +603,7 @@ cat: cat: No such file or directory
 
 
         <div class="col-lg-3 col-md-3 col-sm-6 col-6">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view_item/854036/1656568216166.png" alt=""
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/854036/1656568216166.png" alt=""
             width="240px " height="220px" class="img-fluid">
           <h3 class="fw-bold">Advertise on <br>
             Paytm</h3>
@@ -788,7 +614,7 @@ cat: cat: No such file or directory
 
 
         <div class="col-lg-3 col-md-3 col-sm-6 col-6">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view_item/854033/1626081565192.png" alt=""
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/854033/1626081565192.png" alt=""
             width="240px " height="220px" class="img-fluid">
           <h3 class="fw-bold"> Business <br>
             Khata</h3>
@@ -817,7 +643,7 @@ cat: cat: No such file or directory
       <div class="row justify-content-evenly">
 
         <div class="col-lg-2 col-md-2 col-sm-4 col-12 col12center1" style="margin-left: -35px;">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view/307196/1626420555412.png" alt="" width="160px"
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view/307196/1626420555412.png" alt="" width="160px"
             height="58px" class="img-fluid">
           <p class="fw-medium mt-4">Get started on wealth creation journey with Zero brokerage fee & no hidden charges.
           </p>
@@ -838,7 +664,7 @@ cat: cat: No such file or directory
 
 
         <div class="col-lg-2 col-md-2 col-sm-4 col-6 color">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view_item/800760/1618831809222.png" alt=""
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/800760/1618831809222.png" alt=""
             width="145px" height="158px" class="img-fluid">
           <div class="fw-bold text-white text-center">Invest In <br> ETFs</div>
         </div>
@@ -846,7 +672,7 @@ cat: cat: No such file or directory
 
 
         <div class="col-lg-2 col-md-2 col-sm-4 col-6 color">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view_item/728896/1618575990183.png" alt=""
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/728896/1618575990183.png" alt=""
             width="145px" height="158px" class="img-fluid">
           <div class="fw-bold text-white text-center">Buy Gold</div>
         </div>
@@ -878,13 +704,13 @@ cat: cat: No such file or directory
       <div class="row justify-content-evenly">
 
         <div class="col-lg-2 col-md-2 col-sm-4 col-12  col12center " style="margin-left: -35px;">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view/307197/1626419838546.png" alt="" width="160px"
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view/307197/1626419838546.png" alt="" width="160px"
             height="58px" class="img-fluid">
           <p class="fw-medium mt-4">Best travel solutions with quick ticket bookings, great offers and easy refunds</p>
           <a href="" class="fw-bold paytm-travellearnmore">Learn More</a>
         </div>
         <div class="col-lg-2 col-md-2 col-sm-4 col-6 color1">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view_item/863734/1627552693557.png" alt="" width="72px"
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/863734/1627552693557.png" alt="" width="72px"
             height="72px" class="img-fluid">
           <div class="fw-bold text-white ">
             <h5 class="fw-bold">Flat 14%<br> Cashback </h5>
@@ -894,7 +720,7 @@ cat: cat: No such file or directory
         </div>
 
         <div class="col-lg-2 col-md-2 col-sm-4 col-6 color1">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view_item/864144/1627566096011.png" alt="" width="72px"
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/864144/1627566096011.png" alt="" width="72px"
             height="72px" class="img-fluid">
           <div class="fw-bold text-white ">
             <h5 class="fw-bold">100% Refund </h5>
@@ -904,7 +730,7 @@ cat: cat: No such file or directory
         </div>
 
         <div class="col-lg-2 col-md-2 col-sm-4 col-6 color1">
-          <img src="    https://assetscdn1.paytm.com/images/catalog/view_item/864145/1627566172335.png" alt="" width="72px"
+          <img src="	https://assetscdn1.paytm.com/images/catalog/view_item/864145/1627566172335.png" alt="" width="72px"
             height="72px" class="img-fluid">
           <div class="fw-bold text-white ">
             <h5 class="fw-bold">Flat 10%<br> Cashback </h5>
@@ -914,7 +740,7 @@ cat: cat: No such file or directory
         </div>
 
         <div class="col-lg-2 col-md-2 col-sm-4 col-6 color1">
-          <img src="            https://assetscdn1.paytm.com/images/catalog/view_item/864151/1627567062180.png" alt=""
+          <img src="		https://assetscdn1.paytm.com/images/catalog/view_item/864151/1627567062180.png" alt=""
             width="72px" height="72px" class="img-fluid">
           <div class="fw-bold text-white ">
             <h5 class="fw-bold">Sanitised Bus</h5>
@@ -965,7 +791,7 @@ cat: cat: No such file or directory
               <img src="https://pwebassets.paytm.com/commonwebassets/paytmweb/footer/images/downloadGoogle.svg" alt=""
                    style="cursor:pointer;"
                    onclick="window.open('https://play.google.com/store/apps/details?id=net.one97.paytm', '_blank')">
-
+                
             </a>
           </div>
 
@@ -989,8 +815,8 @@ cat: cat: No such file or directory
         <div class="col-md-3 mt-4">
           <h5 class="fw-bold text-white ">Social Links</h5>
           <span style="position: relative; display: inline-block;">
-            <a href="https://github.com/abinashkumar19"
-               target="_blank"
+            <a href="https://github.com/abinashkumar19" 
+               target="_blank" 
                title="abinashkumar19 GitHub Profile"
                id="github-profile-link"
                style="text-decoration: none;">
@@ -998,7 +824,7 @@ cat: cat: No such file or directory
                 <i class="fa-brands fa-github"></i>
               </span>
             </a>
-            <div id="github-popup"
+            <div id="github-popup" 
                  style="display:none; position:absolute; bottom:120%; left:50%; transform:translateX(-50%); background:#222; color:#fff; padding:14px 22px; border-radius:10px; box-shadow:0 4px 16px rgba(0,0,0,0.18); white-space:nowrap; z-index:1000; min-width:220px; text-align:center;">
               <div style="font-size:1.2em; font-weight:600; margin-bottom:6px;">
                 abinashkumar19
@@ -1039,9 +865,9 @@ cat: cat: No such file or directory
         </div>
 
       </div>
-
+   
     </div>
-
+    
   </footer>
 
 <script >
