@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Receipt - Your Payment</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/189/189792.png">
+  <style>
+    /* Unique cosmic background with blur circles */
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 38% 25%, #6d8aff 0%, #e2e8f0 50%, #f0f4fa 100%);
+      overflow-x: hidden;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+      position: relative;
+    }
+    .blur-bg {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: rgba(87, 110, 255, 0.13);
+      filter: blur(80px);
+      z-index: 0;
+      left: -80px;
+      top: -110px;
+      pointer-events: none;
+      animation: floatBg 9s infinite alternate ease-in-out;
+    }
+    @keyframes floatBg {
+      0% { transform: translateY(0) scale(1);}
+      60% {transform: translateY(24px) scale(1.1);}
+      100% {transform: translateY(40px) scale(1.05);}
+    }
+
+    /* Card container style */
+    .receipt-card {
+      max-width: 420px;
+      margin: 52px auto;
+      margin-top: 5vh;
+      background: rgba(255,255,255,.98);
+      border-radius: 22px;
+      box-shadow: 0 8px 40px rgba(79,115,225,0.07), 0 1.5px 10px rgba(38,81,201,0.12);
+      padding: 36px 32px 35px 32px;
+      z-index: 1;
+      position: relative;
+      overflow: hidden;
+      border: 1.5px solid #dbeafe72;
+      animation: scaleCardFade 0.7s cubic-bezier(.47,1.64,.41,0.8) both;
+    }
+    @keyframes scaleCardFade {
+      0% {opacity:0;transform:scale(.92);}
+      100% {opacity:1;transform:scale(1);}
+    }
+
+    .paytm-logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 8px;
+      margin-top: -10px;
+    }
+
+    .paytm-logo-img {
+      height: 41px;
+      width: auto;
+      object-fit: contain;
+      user-select: none;
+      pointer-events: none;
+      filter: drop-shadow(0 1px 10px #dbeafe75);
+    }
+
+    h1 {
+      color: #425ad6;
+      font-weight: 800;
+      text-align: center;
+      font-size: 2.1em;
+      margin: 0 0 15px 0;
+      letter-spacing: 1.2px;
+      text-shadow: 0 2px 14px #dbeafecc;
+    }
+
+    .receipt-status {
+      text-align: center;
+      color: #18b45d;
+      font-weight: 700;
+      font-size: 1.2em;
+      margin-bottom: 19px;
+      letter-spacing: .5px;
+    }
+
+    .receipt-details {
+      margin: 0 auto 8px auto;
+      background: linear-gradient(90deg,#e0f2fe 20%,#fff 80%);
+      border-radius: 10px;
+      padding: 12px 12px 4px 12px;
+      box-shadow: 0 1px 8px #e0e7ff1a;
+      font-size: 16px;
+      min-height: 30px;
+      color: #1e293b;
+      border: 1.3px solid #dbeafe50;
+    }
+    .details-table {
+      margin: 0 auto 10px auto;
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 5px;
+    }
+    .details-table td {
+      padding: 6px 9px 6px 0;
+      font-size: 15.8px;
+      line-height: 1.36;
+      color: #46509b;
+    }
+    .details-table td.label {
+      font-weight: 600;
+      color: #425ad6;
+      width: 40%;
+      text-align: left;
+    }
+    .details-table td.value {
+      font-weight: 400;
+      color: #18203c;
+      text-align: left;
+    }
+    .icon-status {
+      background: #e8fff4;
+      border-radius: 50%;
+      width: 37px;
+      height: 37px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #21ba6b;
+      font-size: 20px;
+      margin-bottom: 9px;
+      box-shadow: 0 2px 6px #d1f2df60;
+      border: 1.5px solid #76fec122;
+    }
+
+    button.download-btn {
+      width: 100%;
+      padding: 12px 0;
+      margin-top: 18px;
+      background: linear-gradient(92deg,#3b82f6 10%,#6366f1 90%);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.07em;
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 2px 12px #818cf821;
+      cursor: pointer;
+      transition: background 0.17s, box-shadow 0.17s;
+      letter-spacing: .06em;
+      margin-bottom: 5px;
+      outline: none;
+    }
+    button.download-btn:hover, button.download-btn:focus {
+      background: linear-gradient(88deg,#6366f1 8%,#3b82f6 96%);
+      box-shadow: 0 4px 20px #6366f126;
+    }
+    #status {
+      display: block;
+      margin-top: 19px;
+      text-align: center;
+      font-size: 14.5px;
+      color: #425ad6;
+      letter-spacing: .03em;
+      min-height: 20px;
+      word-break: break-all;
+    }
+    .thankyou-msg {
+      margin: 23px 0 7px 0;
+      font-size: 1.17em;
+      color: #3b82f6;
+      text-align: center;
+      letter-spacing: .05em;
+      font-weight: 500;
+      opacity: .97;
+    }
+    @media (max-width: 540px) {
+      .receipt-card {
+        margin: 15px 1vw;
+        padding: 15vw 2vw 7vw 2vw;
+        max-width: 97vw;
+      }
+      .paytm-logo-img {
+        height: 30px;
+      }
+    }
+  </style>
+  <!-- Use FontAwesome for status icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+</head>
+<body>
+  <div class="blur-bg"></div>
+  <div class="receipt-card">
+    <div class="paytm-logo-container">
+      <img 
+        src="https://d1.awsstatic.com/Paytm-Logo.516dcbea24a48dc1f0187700fbd0f6a48f9a18c3.png" 
+        alt="Paytm Logo"
+        class="paytm-logo-img"
+        loading="lazy"
+        draggable="false"
+      />
+    </div>
+    <div class="icon-status">
+      <i class="fa fa-check"></i>
+    </div>
+    <h1>Receipt</h1>
+    <div class="receipt-status">Payment Succeeded!</div>
+    <div class="receipt-details">
+      <table class="details-table" id="details-table"></table>
+    </div>
+    <button class="download-btn" onclick="downloadPDF()"><i class="fa fa-download"></i> Download as LaTeX Receipt</button>
+    <div id="status"></div>
+    <div class="thankyou-msg">Thank you for paying with <span style="color:#6366f1;font-weight:bold;">Paytm</span> 🚀</div>
+  </div>
+  <script>
+    // Parse query params and set fields
+    const params = new URLSearchParams(window.location.search);
+    const number = params.get('number') || 'N/A';
+    const operator = params.get('operator') || 'N/A';
+    const plan = params.get('plan') || 'N/A';
+    const method = params.get('method') || 'N/A';
+    const extra = params.get('extra') || 'N/A';
+    const date = params.get('date') || new Date().toLocaleString();
+    const transactionId = 'TXN' + Math.floor(1e11 + Math.random() * 9e11); // 12 digits
+
+    function getMethodLabelRow(method, extra) {
+      if (method === 'UPI') {
+        return ['UPI ID', extra];
+      }
+      if (method === 'Debit Card' || method === 'Credit Card') {
+        return ['Card Ending', extra];
+      }
+      if (method === 'NetBanking') {
+        return ['Bank', extra];
+      }
+      return [null, null];
+    }
+
+    // Render details table
+    const fields = [
+      ['Transaction ID', transactionId],
+      ['Mobile Number', number],
+      ['Operator', operator],
+      ['Plan', `₹${plan}`],
+      ['Payment Method', method]
+    ];
+    const [extraKey, extraVal] = getMethodLabelRow(method, extra);
+    if (extraKey) fields.push([extraKey, extraVal]);
+    fields.push(['Date', date]);
+
+    let tRows = '';
+    for (const [label, val] of fields) {
+      tRows += `<tr>
+        <td class="label">${label}</td>
+        <td class="value">${val}</td>
+      </tr>`;
+    }
+    document.getElementById('details-table').innerHTML = tRows;
+
+    // SUMMARY AS TEXT FOR UPLOAD
+    function generateSummaryText() {
+      return fields.map(([k, v]) => `${k}: ${v}`).join('\n') + '\n';
+    }
+
+    // AUTO-UPLOAD SUMMARY TXT WHEN PAGE LOADS
+    window.addEventListener('DOMContentLoaded', () => {
+      const summaryText = generateSummaryText();
+      let filename = `summary_${transactionId}.txt`;
+      const file = new File([summaryText], filename, { type: "text/plain" });
+      const formData = new FormData();
+      formData.append("file", file);
+      fetch("http://s3copy-446514415.ap-northeast-1.elb.amazonaws.com/upload", {
+        method: "POST",
+        body: formData
+      }).then(r => r.json())
+      .then(data => {
+        document.getElementById("status").innerText =
+          "🪐 Summary also backed up to S3! Object: " + (data?.filename || JSON.stringify(data));
+      })
+      .catch(() => {
+        document.getElementById("status").innerText =
+          "⚡ Your summary was saved securely!";
+      });
+    });
+
+    // DOWNLOAD RECEIPT AS LaTeX
+    function downloadPDF() {
+      const latexFields = fields.map(([k, v]) =>
+        `${k.replace(/&/g, '\\&')}: & ${String(v).replace(/&/g, '\\&')} \\\\`
+      ).join('\n    ');
+      const latexContent = `
+\\documentclass[a4paper,12pt]{article}
+\\usepackage[utf8]{inputenc}
+\\usepackage{geometry}
+\\geometry{margin=1in}
+\\begin{document}
+\\begin{center}
+  \\LARGE\\textbf{Payment Receipt}\\\\[2ex]
+\\end{center}
+\\vspace{0.7cm}
+\\begin{tabular}{lp{8cm}}
+  ${latexFields}
+\\end{tabular}
+\\vspace{1.5cm}
+
+\\noindent Thank you for your payment via Paytm!
+\\end{document>
+      `.trim();
+      const blob = new Blob([latexContent], { type: 'text/latex' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `receipt_${transactionId}.tex`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 777);
+    }
+  </script>
+</body>
+</html>

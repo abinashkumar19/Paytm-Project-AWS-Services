@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Processing Payment</title>
+  <style>
+    html, body {
+      min-height: 100vh;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      width: 100vw;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      /* fallback for very old browsers */
+      background: #e3f1ff;
+    }
+    /* Fast animated "rainbow" blue & white background */
+    .animated-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background: linear-gradient(120deg, #2b6fec 0%, #ecf6ff 25%, #4fd1fa 50%, #fafdff 75%, #3580db 100%);
+      background-size: 400% 400%;
+      animation: bgRainbowMove 2.5s linear infinite;
+    }
+
+    @keyframes bgRainbowMove {
+      0% { background-position: 0% 50%; }
+      33% { background-position: 100% 50%; }
+      67% { background-position: 0% 100%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .moving-bar {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      opacity: 0.3;
+      z-index: 1;
+    }
+    .bar1, .bar2, .bar3 {
+      position: absolute;
+      width: 160vw;
+      height: 14vh;
+      left: -30vw;
+      border-radius: 40px;
+      filter: blur(24px);
+      opacity: 0.55;
+    }
+    .bar1 {
+      top: 12vh;
+      background: linear-gradient(90deg, #eaf8ff 0%, #51aaff 100%);
+      animation: moveBar1 1.9s cubic-bezier(.35,.71,.72,1) infinite alternate;
+    }
+    .bar2 {
+      top: 38vh;
+      background: linear-gradient(90deg, #228cec 0%, #ecfcff 98%);
+      animation: moveBar2 1.5s cubic-bezier(.25,.65,.51,1.22) infinite alternate;
+      opacity: 0.37;
+    }
+    .bar3 {
+      top: 64vh;
+      background: linear-gradient(90deg, #5bddfc 2%, #b7e7ff 95%);
+      animation: moveBar3 2.2s cubic-bezier(.85,.12,.43,1.05) infinite alternate-reverse;
+      opacity: 0.30;
+    }
+    @keyframes moveBar1 {
+      from { transform: translateX(0) skewX(-10deg);}
+      to   { transform: translateX(25vw) skewX(10deg);}
+    }
+    @keyframes moveBar2 {
+      from { transform: translateX(0) skewX(-13deg);}
+      to   { transform: translateX(-23vw) skewX(11deg);}
+    }
+    @keyframes moveBar3 {
+      from { transform: translateX(0) skewX(9deg);}
+      to   { transform: translateX(29vw) skewX(-13deg);}
+    }
+
+    /* Glass card for centering */
+    .container {
+      max-width: 400px;
+      background: rgba(255,255,255,0.98);
+      padding: 32px 26px 26px 26px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 123, 255, 0.13), 0 1.5px 8px rgba(0,123,255,0.09);
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      backdrop-filter: blur(2px) saturate(120%);
+      -webkit-backdrop-filter: blur(2px) saturate(120%);
+      animation: fadeInUp 0.8s cubic-bezier(.39,.575,.565,1) 0s both;
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(60px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    h2 {
+      margin-bottom: 26px;
+      color: #0a53be;
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 8px #0057ff11;
+    }
+    /* Proper circular loader */
+    .circle-loader {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 28px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .circle-loader-svg {
+      width: 56px;
+      height: 56px;
+      display: block;
+      transform: rotate(-90deg);
+    }
+    .loader-bg {
+      stroke: #b9dafc;
+      stroke-width: 7;
+      opacity: 0.38;
+    }
+    .loader-fg {
+      stroke: #0078D7;
+      stroke-width: 7;
+      stroke-linecap: round;
+      stroke-dasharray: 157;
+      stroke-dashoffset: 130;
+      animation: loader-spin 1.2s linear infinite;
+    }
+    @keyframes loader-spin {
+      0% { stroke-dashoffset: 126; }
+      75% { stroke-dashoffset: 35; }
+      100% { stroke-dashoffset: 126; }
+    }
+    .circle-loader-svg {
+      shape-rendering: geometricPrecision;
+    }
+    p {
+      color: #476092; 
+      font-size: 1.04em;
+      margin-bottom: 0;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+    @media (max-width: 510px) {
+      .container {
+        max-width: 97vw;
+        padding: 22px 2vw 20px 2vw;
+        border-radius: 13px;
+      }
+      h2 { font-size: 1.18rem; }
+      .circle-loader, .circle-loader-svg { width: 34px; height: 34px; }
+      .circle-loader-svg { min-width: 34px; min-height: 34px; }
+      .loader-bg, .loader-fg { stroke-width: 4; }
+      .animated-bg { height: 100vh; width: 100vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg">
+    <div class="moving-bar bar1"></div>
+    <div class="moving-bar bar2"></div>
+    <div class="moving-bar bar3"></div>
+  </div>
+  <div class="container">
+    <h2>Processing Payment...</h2>
+    <div class="circle-loader" aria-label="Loading">
+      <svg class="circle-loader-svg" viewBox="0 0 56 56">
+        <circle class="loader-bg" cx="28" cy="28" r="25" fill="none"/>
+        <circle class="loader-fg" cx="28" cy="28" r="25" fill="none"/>
+      </svg>
+    </div>
+    <p>Please wait while we process your payment.</p>
+  </div>
+  <script>
+    setTimeout(() => {
+      const params = window.location.search;
+      window.location.href = `summary.html${params}`;
+    }, 3000);
+  </script>
+</body>
+</html>

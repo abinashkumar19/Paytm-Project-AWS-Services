@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobile Recharge</title>
+  <link rel="icon" type="image/png" href="https://paytm.com/favicon.ico" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+  <style>
+    html, body {
+      width: 100vw;
+      min-height: 100vh;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      min-height: 100vh;
+      height: 100%;
+      position: relative;
+      z-index: 0;
+      margin: 0;
+      padding: 0;
+    }
+    /* Fullscreen moving path animated background */
+    .animated-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    /* Style the rest of the content to be above the animation */
+    .page-content {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .ptm-header {
+      width: 100%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      padding: 0.5rem 0 0.5rem 0;
+      justify-content: center;
+      margin-bottom: 32px;
+      z-index: 2;
+      position: relative;
+    }
+    .ptm-header img {
+      height: 46px;
+    }
+    .main-content-flex {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: stretch;
+      gap: 0;
+      margin: 0;
+      max-width: 100vw;
+      width: 100vw;
+      min-height: 75vh;
+      position: relative;
+      z-index: 2;
+    }
+
+    .container {
+      box-shadow: 0 6px 36px 0 rgb(94 166 255 / 13%);
+      max-width: 425px;
+      width: 100%;
+      background: #fff;
+      border-radius: 18px;
+      margin: auto;
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid #e5e8ef;
+      flex-shrink: 0;
+      align-self: center;
+      z-index: 2;
+      min-width: 315px;
+    }
+    .ptm-topbar {
+      background: linear-gradient(98deg,#00baf2 0%,#1a72e6 100%);
+      padding: 22px 28px 16px 28px;
+      border-bottom-right-radius: 38px 36px;
+      border-bottom-left-radius: 38px 36px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 3px 16px 0 rgba(43,140,235,0.10);
+    }
+    .ptm-topbar h2 {
+      margin: 0 0 7px 0;
+      font-size: 1.55rem;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-shadow: 0 2px 8px rgba(0, 186, 242, 0.08);
+    }
+    .ptm-form {
+      margin: 0;
+      padding: 26px 28px 18px 28px;
+      position: relative;
+      background: #fff;
+    }
+    .ptm-form label {
+      display: block;
+      font-weight: 500;
+      color: #26397d;
+      font-size: 0.98rem;
+      margin: 18px 0 4px 1px;
+      letter-spacing: 0.1px;
+    }
+    .ptm-form input, .ptm-form select {
+      width: 100%;
+      padding: 13px 12px;
+      border: 1.5px solid #d2e2f3;
+      border-radius: 7px;
+      font-size: 1rem;
+      background: #f7fafd;
+      box-sizing: border-box;
+      margin-bottom: 2px;
+      transition: border 0.2s, box-shadow 0.2s;
+      outline: none;
+      color: #1a3353;
+      font-family: inherit;
+      font-weight: 500;
+      box-shadow: 0 2px 8px 0 rgb(43 140 235 / 3%);
+    }
+    .ptm-form input:focus, .ptm-form select:focus {
+      border: 1.5px solid #00baf2;
+      background: #fff;
+      box-shadow: 0 2px 12px 0 rgb(43 140 235 / 7%);
+    }
+    .ptm-form .method-box {
+      display: none;
+      margin-top: 13px;
+      margin-bottom: 5px;
+      background: #f3f7fe;
+      padding: 14px 11px 7px 11px;
+      border-radius: 8px;
+      border: 1px solid #e2ecfc;
+      box-shadow: 0 1.5px 7px rgba(0,123,255,0.025);
+      font-size: 0.96rem;
+    }
+    .ptm-btn {
+      width: 100%;
+      margin-top: 25px;
+      padding: 14px 0 13px 0;
+      border: none;
+      border-radius: 29px;
+      background: linear-gradient(98deg, #00baf2 0%, #1a72e6 100%);
+      color: #fff;
+      font-size: 1.12rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      box-shadow: 0 3px 14px 0 rgba(43,140,235,0.11);
+      cursor: pointer;
+      transition: background 0.13s, box-shadow 0.18s;
+    }
+    .ptm-btn:hover {
+      background: linear-gradient(98deg, #039ed9 0%, #2862d6 100%);
+      box-shadow: 0 4px 22px 0 rgba(43,140,235,0.18);
+    }
+    /* Responsive styles - focus only on form centering */
+    @media (max-width: 950px) {
+      .main-content-flex {
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        max-width: 100vw;
+        min-height: unset;
+        width: 100vw;
+      }
+      .container {
+        margin: 14px auto;
+        z-index: 2;
+      }
+    }
+    @media (max-width: 750px) {
+      .main-content-flex {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0 !important;
+      }
+      .container {
+        min-width: 0;
+        max-width: 98vw;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+      }
+    }
+    @media (max-width: 600px) {
+      .ptm-header img {
+        height: 36px;
+      }
+      .ptm-topbar, .ptm-form {
+        padding-left: 4vw;
+        padding-right: 4vw;
+      }
+      .ptm-topbar h2 {
+        font-size: 1.1rem;
+      }
+      .container {
+        max-width: 99vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg">
+    <!-- SVG Animated Path Background (responsive and looping, Paytm color palette) -->
+    <svg id="bg-svg" width="100%" height="100%" preserveAspectRatio="none" style="position:absolute;top:0;left:0;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gradientA" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#00baf2" stop-opacity="0.88"/>
+          <stop offset="100%" stop-color="#aaf1fb" stop-opacity="0.5"/>
+        </linearGradient>
+        <linearGradient id="gradientB" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#1a72e6" stop-opacity="0.7"/>
+          <stop offset="100%" stop-color="#02d2f2" stop-opacity="0.25"/>
+        </linearGradient>
+      </defs>
+      <path id="path1" d="" fill="url(#gradientA)" />
+      <path id="path2" d="" fill="url(#gradientB)" />
+    </svg>
+  </div>
+  <div class="page-content">
+    <div class="ptm-header">
+      <img src="https://d1.awsstatic.com/Paytm-Logo.516dcbea24a48dc1f0187700fbd0f6a48f9a18c3.png" alt="Paytm Logo"/>
+    </div>
+    <div class="main-content-flex">
+      <div class="container">
+        <div class="ptm-topbar">
+          <h2>Recharge your Mobile</h2>
+        </div>
+        <form id="rechargeForm" class="ptm-form">
+          <label for="number">Mobile Number</label>
+          <input type="tel" id="number" maxlength="10" pattern="[0-9]{10}" required title="Please enter a valid 10 digit mobile number" placeholder="Enter 10 digit number" />
+
+          <label for="operator">Operator</label>
+          <select id="operator" required>
+            <option value="">Select Operator</option>
+            <option value="Airtel">Airtel</option>
+            <option value="Jio">Jio</option>
+            <option value="Vi">Vi</option>
+            <option value="BSNL">BSNL</option>
+          </select>
+
+          <label for="plan">Choose Plan</label>
+          <select id="plan" required>
+            <option value="">Select Plan</option>
+            <option value="149">₹149 - 1GB/day - 20 Days</option>
+            <option value="249">₹249 - 1.5GB/day - 28 Days</option>
+            <option value="399">₹399 - 2GB/day - 56 Days</option>
+            <option value="599">₹599 - 2GB/day - 84 Days</option>
+          </select>
+
+          <label for="method">Payment Method</label>
+          <select id="method" required>
+            <option value="">Select Method</option>
+            <option value="UPI">UPI</option>
+            <option value="Debit Card">Debit Card</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="NetBanking">Net Banking</option>
+          </select>
+
+          <!-- Dynamic input fields based on payment method -->
+          <div id="upiBox" class="method-box">
+            <label for="upiId">Enter UPI ID</label>
+            <input type="text" id="upiId" placeholder="example@upi" />
+          </div>
+
+          <div id="cardBox" class="method-box">
+            <label for="cardNumber">Card Number</label>
+            <input type="text" id="cardNumber" maxlength="16" placeholder="1234 5678 9012 3456" />
+            <label for="expiry">Expiry Date</label>
+            <input type="month" id="expiry" />
+            <label for="cvv">CVV</label>
+            <input type="password" id="cvv" maxlength="3" />
+          </div>
+
+          <div id="netBox" class="method-box">
+            <label for="bank">Select Bank</label>
+            <select id="bank">
+              <option value="SBI">SBI</option>
+              <option value="HDFC">HDFC</option>
+              <option value="ICICI">ICICI</option>
+              <option value="AXIS">AXIS</option>
+            </select>
+          </div>
+
+          <button class="ptm-btn" type="submit">Proceed to Pay</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Animate SVG Paths to create moving background effect
+    (function animatePaths() {
+      const svg = document.getElementById('bg-svg');
+      const path1 = document.getElementById('path1');
+      const path2 = document.getElementById('path2');
+      function genPath(w, h, t, amp, offset) {
+        // Return smooth, undulating wave path  
+        const ctrl1 = h * (0.34 + 0.055 * Math.sin(t + offset));
+        const ctrl2 = h * (0.65 + 0.08 * Math.cos(t + offset));
+        const midY = h * (0.6 + amp * Math.sin(t + offset * 0.75));
+        const endY = h * (0.88 + 0.062 * Math.cos(t * 0.9 + offset));
+        return [
+          `M 0 ${h*0.18}`,
+          `Q ${w*0.35} ${ctrl1}, ${w*0.5} ${midY}`,
+          `T ${w} ${endY}`,
+          `L ${w} 0 L 0 0 Z`
+        ].join(' ');
+      }
+      function genPath2(w, h, t, amp, offset) {
+        // Second layer path, different phase
+        const ctrl1 = h * (0.4 + 0.07 * Math.sin(-t + offset));
+        const ctrl2 = h * (0.73 + 0.055 * Math.cos(t + offset*1.5));
+        const midY = h * (0.74 + amp * Math.sin(-t + offset * 1.2));
+        const endY = h * (0.96 + 0.08 * Math.sin(t * 0.7 + offset));
+        return [
+          `M 0 ${h*0.41}`,
+          `Q ${w*0.44} ${ctrl1}, ${w*0.53} ${midY}`,
+          `T ${w} ${endY}`,
+          `L ${w} 0 L 0 0 Z`
+        ].join(' ');
+      }
+      function resizeAndDraw() {
+        const w = window.innerWidth, h = window.innerHeight;
+        svg.setAttribute('width', w);
+        svg.setAttribute('height', h);
+      }
+      function animate() {
+        const w = window.innerWidth, h = window.innerHeight;
+        const now = Date.now() / 1250;
+        path1.setAttribute('d', genPath(w, h, now, 0.11, 0));
+        path2.setAttribute('d', genPath2(w, h, now, 0.065, 2.1));
+        requestAnimationFrame(animate);
+      }
+      resizeAndDraw();
+      animate();
+      window.addEventListener('resize', resizeAndDraw);
+    })();
+
+    // Form behavior unchanged
+    const form = document.getElementById('rechargeForm');
+    const methodSelect = document.getElementById('method');
+    const upiBox = document.getElementById('upiBox');
+    const cardBox = document.getElementById('cardBox');
+    const netBox = document.getElementById('netBox');
+    // Show relevant payment inputs based on method
+    methodSelect.addEventListener('change', () => {
+      upiBox.style.display = 'none';
+      cardBox.style.display = 'none';
+      netBox.style.display = 'none';
+      if (methodSelect.value === 'UPI') upiBox.style.display = 'block';
+      if (methodSelect.value === 'Debit Card' || methodSelect.value === 'Credit Card') cardBox.style.display = 'block';
+      if (methodSelect.value === 'NetBanking') netBox.style.display = 'block';
+    });
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const number = document.getElementById('number').value;
+      const operator = document.getElementById('operator').value;
+      const plan = document.getElementById('plan').value;
+      const method = document.getElementById('method').value;
+      let extra = '';
+      if (method === 'UPI') {
+        extra = document.getElementById('upiId').value;
+      } else if (method === 'Debit Card' || method === 'Credit Card') {
+        extra = document.getElementById('cardNumber').value.slice(-4);
+      } else if (method === 'NetBanking') {
+        extra = document.getElementById('bank').value;
+      }
+      const params = new URLSearchParams({
+        number,
+        operator,
+        plan,
+        method,
+        extra,
+        date: new Date().toLocaleString()
+      });
+      window.location.href = `processing.html?${params.toString()}`;
+    });
+  </script>
+</body>
+</html>
